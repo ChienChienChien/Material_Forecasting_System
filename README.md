@@ -197,7 +197,8 @@ Material_Forecasting_System/
 │   ├── data.py
 │   ├── main.py
 │   ├── model.py
-│   └── utils.py
+|   ├── utils.py
+│   └── README.md
 └── sql_templates/
     ├── README.md
     ├── actual_consumption.sql
