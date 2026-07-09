@@ -159,7 +159,7 @@ class PCI(UserDict):
     def to_db(self):
         data_date = self.Param.today
         sqlstr = f'''
-        delete from YS_Material_PCI
+        delete from PCI
         where DataDate = '{data_date}'
         '''
         DB.execute(sqlstr, GlobalVar.QUANTDATA_CONNSTR)
@@ -184,7 +184,7 @@ class PCI(UserDict):
                     list_of_params.append(param)
 
         sqlstr = f''' 
-        insert into YS_Material_PCI(DataDate,EstDate,Material,IniInv,IniInvSub,Procurement,Consume,ConsumeMff,EstInv,EstInvSub)
+        insert into PCI(DataDate,EstDate,Material,IniInv,IniInvSub,Procurement,Consume,ConsumeMff,EstInv,EstInvSub)
         values(:data_date,:est_date,:material,:ini_inv,:ini_inv_sub,:procurement,:consume,:consume_mff,:est_inv,:est_inv_sub)
         '''
         DB.execute(sqlstr, GlobalVar.QUANTDATA_CONNSTR, params=list_of_params)
@@ -194,11 +194,11 @@ class PCI(UserDict):
         sqlstr = f'''
         with source as(
             SELECT *
-            FROM [QUANTDATA ].[walsindba].[YS_Material_PCI]
+            FROM PCI
             where DataDate = '{self.Param.today}'
         )
 
-        MERGE INTO YS_Material_PCI_Static as target
+        MERGE INTO PCI_Static as target
         USING source
         ON target.EstDate = source.EstDate AND target.Material = source.Material
 

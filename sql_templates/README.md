@@ -1,9 +1,7 @@
 # SQL Templates
 
-These files are **generic templates** that describe the source-query shape used by the
-portfolio version. They intentionally avoid internal schema names, table names, system
-codes, plant names, and company-specific business identifiers.
+These SQL files are generalized templates used to describe the source-query logic behind the portfolio version of this project.
 
-The executable portfolio pipeline reads CSV files through `getlib.py`. If this project
-is adapted to a real environment, replace these templates with environment-specific SQL
-inside a private repository only.
+They are not intended to be executed directly. Internal schema names, table names, plant codes, system identifiers, and company-specific business rules have been removed or generalized.
+
+This repository focuses on explaining the data flow, forecasting logic, and dashboard design. The production version depends on internal systems and private data sources that are not included in this public repository.

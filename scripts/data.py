@@ -4,7 +4,6 @@ import datetime
 import calendar
 import pandas as pd
 from dglib.log.nlogE import Elog
-from getlib import GlobalVar
 from dglib.db.dbutils import DB
 
 class Param:
@@ -453,7 +452,7 @@ class ConsumeData:
             DB.execute(sqlstr, GlobalVar.QUANTDATA_CONNSTR)
 
 
-class IventoryData:
+class InventoryData:
 
     ''' 
     {料號:{日期:期末庫存}}
@@ -666,5 +665,5 @@ if __name__ == '__main__':
 
     pm = Param()
     p = ProcurementData(pm)
-    # c = ConsumeData(pm)
-    # i = IventoryData(pm)
+    c = ConsumeData(pm)
+    i = InventoryData(pm)
