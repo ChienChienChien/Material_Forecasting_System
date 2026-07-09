@@ -202,8 +202,8 @@ class ConsumeData:
         '''
         計算下三月的原料耗用量
         若bomid為
-            YS_Bom1_0 -> 日耗用 = 整月耗用 / 工作天數
-            YS_Bom2_2 -> 判斷該周是否用排程計算日耗用
+            Bom1_0 -> 日耗用 = 整月耗用 / 工作天數
+            Bom2_2 -> 判斷該周是否用排程計算日耗用
                         -> Y -> 當日與下周的 日耗用 = 排程 * BOM2
                         -> N -> 日耗用 = 周生產計劃 * BOM2 / 該周工作天數
             判斷邏輯：若當日為當周最後一天，則提前換周的原則下，下周需用排程計算
@@ -439,12 +439,12 @@ class ConsumeData:
         todaytime_str = format(self.Param.todaytime, '%Y-%m-%d %H:%M:%S')
         event = '耗用預估'
         item = '鋼種對應檢核'
-        muser = 'ur08173'
+        muser = 'system_user'
         for pack in self.log_msg_list:
             level = pack.get('level')
             notes = pack.get('msg')
             sqlstr = f'''
-            insert into YS_Material_PCI_Log
+            insert into PCI_Log
             (Datetime, Event, Item, [Level], Notes, MUser) 
             values
             ('{todaytime_str}','{event}','{item}','{level}','{notes}','{muser}')
@@ -491,7 +491,8 @@ class InventoryData:
             for date in self.Param.date_list:
                 if date < self.Param.today:
                     # 此處兩料號原料抓取SAP庫存(MES沒有庫存資料)
-                    if material in ['03011200S099','0301140TI071']:
+                    SPECIAL_SAP_INVENTORY_MATERIALS = []
+                    if material in SPECIAL_SAP_INVENTORY_MATERIALS:
                         inv = self.inventory_sap.get(material,{}).get(date,0)
                     else:
                         inv = self.inventory_mes.get(material,{}).get(date,0)
