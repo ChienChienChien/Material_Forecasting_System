@@ -131,12 +131,12 @@ class PCIChain:
 
 class PCI(UserDict):
 
-    def __init__(self, Param, ProcurementData, ConsumeData, IventoryData):
+    def __init__(self, Param, ProcurementData, ConsumeData, InventoryData):
         self.data = {}
         self.Param = Param
         self.Procurement = ProcurementData
         self.Consume = ConsumeData
-        self.Inventory = IventoryData
+        self.Inventory = InventoryData
         self.create_chain()
 
     def create_chain(self):
@@ -222,11 +222,11 @@ class PCI(UserDict):
 
 if __name__ == '__main__':
 
-    from data import Param, ConsumeData, IventoryData, ProcurementData
+    from data import Param, ConsumeData, InventoryData, ProcurementData
     
     param = Param()
     c = ConsumeData(param)
-    i = IventoryData(param)
+    i = InventoryData(param)
     p = ProcurementData(param)
 
     model = PCI(param, p, c, i)
