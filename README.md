@@ -144,6 +144,7 @@ flowchart LR
 
 ### 2. 庫存異常警示
 
+
 ![庫存量過高告警](dashboard/02_inventory_volume_alert.jpg)
 
 此頁面彙整各原料目前與未來的庫存風險，協助使用者快速找出需要優先關注的原料項目。相較於逐項查看明細，告警頁面可以讓管理者直接聚焦在異常與風險較高的材料。
@@ -154,6 +155,7 @@ flowchart LR
 
 ### 3. 斷料風險警示
 
+
 ![斷料警示](dashboard/03_near_term_stockout_alert.jpg)
 
 此頁面聚焦於近期可能發生的缺料或斷料風險。系統將未來短期內的庫存推移結果轉換成警示清單，使採購與生產單位能夠優先處理即將影響排程的項目。
@@ -163,6 +165,7 @@ flowchart LR
 ---
 
 ### 4. 每日預估矩陣
+
 
 ![每日預估矩陣](dashboard/04_daily_forecast_matrix.jpg)
 
