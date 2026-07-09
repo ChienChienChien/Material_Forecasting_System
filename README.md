@@ -133,8 +133,7 @@ flowchart LR
 
 ### 1. 庫存預測趨勢
 
-
-![庫存預測趨勢](dashboard/01_inventory_forecast_trend.jpg)
+<img src="./dashboard/01_inventory_forecast_trend.jpg" alt="庫存預測趨勢" width="900">
 
 此頁面用於追蹤單一原料在未來期間的庫存變化。管理者可以同時觀察目前庫存、預計進貨、預估耗用與安全水位，快速判斷庫存是否會在未來某個時間點跌破警戒線。
 
@@ -144,8 +143,7 @@ flowchart LR
 
 ### 2. 庫存異常警示
 
-
-![庫存量過高告警](dashboard/02_inventory_volume_alert.jpg)
+<img src="./dashboard/02_inventory_volume_alert.jpg" alt="庫存預測趨勢" width="300">
 
 此頁面彙整各原料目前與未來的庫存風險，協助使用者快速找出需要優先關注的原料項目。相較於逐項查看明細，告警頁面可以讓管理者直接聚焦在異常與風險較高的材料。
 
@@ -155,7 +153,7 @@ flowchart LR
 
 ### 3. 斷料風險警示
 
-![斷料警示](dashboard/03_near_term_stockout_alert.jpg)
+<img src="./dashboard/03_near_term_stockout_alert.jpg" alt="庫存預測趨勢" width="800">
 
 此頁面聚焦於近期可能發生的缺料或斷料風險。系統將未來短期內的庫存推移結果轉換成警示清單，使採購與生產單位能夠優先處理即將影響排程的項目。
 
@@ -165,8 +163,7 @@ flowchart LR
 
 ### 4. 每日預估矩陣
 
-
-![每日預估矩陣](dashboard/04_daily_forecast_matrix.jpg)
+<img src="./dashboard/04_daily_forecast_matrix.jpg" alt="庫存預測趨勢" width="900">
 
 此頁面將每日庫存、進貨、耗用與預估結果整理成矩陣形式，適合進一步追查單一原料在不同日期的變化原因。當趨勢圖或警示頁面發現異常時，使用者可以透過此頁面回到日別明細，確認風險來源。
 
