@@ -1,4 +1,4 @@
-# Material Forecasting System｜原料進耗存預測與庫存告警系統
+# 原料進耗存預測與庫存告警系統
 
 這是一個用於製造業原料管理的資料分析與決策支援專案。系統整合庫存、採購、耗用、BOM 與生產計畫等資料，透過 Python 建立每日進耗存推估邏輯，並以 Power BI Dashboard 呈現未來庫存趨勢、缺料風險與庫存告警，協助採購、生產與管理單位提前掌握原料風險。
 
@@ -146,7 +146,7 @@ flowchart LR
 
 ### 3. 斷料警示
 
-![斷料警示](dashboard/03_near_term_stockout_alert.jpg)
+![斷料警示](dashboard/04_daily_forecast_matrix.jpg)
 
 此頁面聚焦於近期可能發生的缺料或待料風險。系統將未來短期內的庫存推移結果轉換成告警清單，使採購與生產單位能夠優先處理即將影響排程的項目。
 
