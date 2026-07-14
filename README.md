@@ -56,6 +56,8 @@ flowchart TB
     H --> I["Power Automate／Teams 告警"]
 ```
 
+各元件職責、預測資料流與告警流程請見[詳細系統架構](docs/architecture.md)。
+
 ## 個人貢獻
 
 - 整合跨系統原料、採購、庫存、BOM 及生產資料。
