@@ -1,4 +1,4 @@
-[Back to English README](../README_EN.md)
+[繁體中文](architecture.md) | **English**
 
 # Raw Material Inventory Forecasting | System Architecture
 
