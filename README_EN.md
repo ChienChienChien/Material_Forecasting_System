@@ -56,6 +56,8 @@ flowchart TB
     H --> I["Power Automate and Teams alerts"]
 ```
 
+See the [detailed system architecture](docs/architecture_en.md) for component responsibilities and the forecasting data flow.
+
 ## My Contributions
 
 - Integrated raw-material, procurement, inventory, BOM, and production data across systems.
