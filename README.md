@@ -1,108 +1,108 @@
-**繁體中文** | [English](README_EN.md)
+**English** | [繁體中文](README_ZH-TW.md)
 
-# 原料進耗存預測與庫存告警系統
+# Raw Material Inventory Forecasting and Alert System
 
-將原料管理由當期庫存檢視延伸至未來供需預測，提供採購、生產與管理單位一致的備料及風險判斷依據。系統整合庫存、採購、BOM 與生產計畫，逐日推估未來三個月的進貨、耗用及庫存，支援超過 **50 種原料**、每月約 **新台幣 10 億元**的成本管理，並透過分級告警協助相關單位提前採取行動。
+Extended raw-material planning from a current-stock view to a forward-looking supply-and-demand forecast, giving procurement, production, and management teams a shared basis for replenishment and risk decisions. The system integrates inventory, procurement, bill of materials (BOM), and production-plan data to forecast daily receipts, consumption, and stock for the next three months. It covers more than **50 raw materials** with a monthly cost base of approximately **NT$1 billion** and issues tiered alerts for early action.
 
-## 專案概況
+## Project Overview
 
-| 項目 | 說明 |
+| Item | Description |
 |---|---|
-| 業務範圍 | 原料採購、庫存及生產管理 |
-| 個人職責 | 資料整合、預測邏輯、Power BI、告警流程 |
-| 管理範圍 | 超過 50 種原料 |
-| 成本規模 | 每月約新台幣 10 億元 |
-| 預測期間 | 未來三個月，每日更新 |
+| Business domain | Raw-material procurement, inventory, and production planning |
+| My role | Data integration, forecasting logic, Power BI reporting, alert workflow |
+| Coverage | More than 50 raw materials |
+| Cost base | Approximately NT$1 billion per month |
+| Forecast horizon | Next three months, updated daily |
 
-## 問題
+## Business Challenge
 
-原料庫存、採購進度、實際耗用、BOM 與生產計畫分散於不同系統。僅查看當前庫存，無法判斷未來進貨能否支應生產需求；缺料若發現過晚，也會壓縮採購及排程調整時間。
+Inventory, procurement status, actual consumption, BOM, and production plans were distributed across different systems. Current inventory alone could not show whether future receipts would meet production demand, while late identification of a shortage reduced the time available for purchasing and schedule adjustments.
 
-## 作法
+## Approach
 
-1. 整合庫存、管制庫存、採購、進貨、BOM、生產計畫及實際耗用。
-2. 將各來源對齊至原料與日期維度。
-3. 依短期排程及中期生產計畫推估每日耗用。
-4. 加入預計進貨與庫存異動，逐日計算未來庫存。
-5. 依安全水位及缺料時間分級告警。
-6. 以 Power BI 呈現趨勢、風險清單及日別明細，並由 Teams 每日通知。
+1. Integrated on-hand and restricted inventory, purchase orders, inbound schedules, BOM, production plans, and actual consumption.
+2. Aligned all sources by material and date.
+3. Estimated daily consumption using near-term production schedules and medium-term plans.
+4. Added planned receipts and inventory movements to calculate future daily balances.
+5. Assigned alert levels based on safety thresholds and expected shortage dates.
+6. Presented trends, risk lists, and daily detail in Power BI and issued daily Teams notifications.
 
-## 核心邏輯
+## Core Logic
 
 ```text
-可用庫存 = 總庫存 - 管制庫存
+Available inventory = Total inventory - Restricted inventory
 ```
 
 ```text
-當日預估庫存 = 前日預估庫存 + 當日進貨 - 當日耗用
+Forecast inventory today = Forecast inventory yesterday + Receipts today - Consumption today
 ```
 
-| 預測期間 | 耗用依據 |
+| Forecast period | Consumption basis |
 |---|---|
-| 近一週 | BOM 與實際生產排程 |
-| 當月後續 | BOM、週生產計畫及工作天數 |
-| 次月起 | BOM、月生產計畫及工作天數 |
+| Next week | BOM and actual production schedule |
+| Remainder of current month | BOM, weekly production plan, and working days |
+| Following months | BOM, monthly production plan, and working days |
 
-## 系統架構
+## Architecture
 
 ```mermaid
 flowchart TB
-    A["庫存／採購／進貨"] --> E["Python 資料整合"]
-    B["BOM／生產計畫"] --> E
-    C["實際耗用／作業日曆"] --> E
-    E --> F["每日進耗存推估"]
-    F --> G["SQL 預測結果"]
-    G --> H["Power BI"]
-    H --> I["Power Automate／Teams 告警"]
+    A["Inventory, procurement, and receipts"] --> E["Python data integration"]
+    B["BOM and production plans"] --> E
+    C["Actual consumption and work calendar"] --> E
+    E --> F["Daily inventory forecast"]
+    F --> G["Forecast results in SQL"]
+    G --> H["Power BI reporting"]
+    H --> I["Power Automate and Teams alerts"]
 ```
 
-各元件職責、預測資料流與告警流程請見[詳細系統架構](docs/architecture.md)。
+See the [detailed system architecture](docs/architecture_en.md) for component responsibilities and the forecasting data flow.
 
-## 個人貢獻
+## My Contributions
 
-- 整合跨系統原料、採購、庫存、BOM 及生產資料。
-- 使用 Python 建立每日庫存推移與缺料判斷。
-- 設計可供 Power BI 使用的資料模型。
-- 建置庫存趨勢、風險清單及明細查詢頁面。
-- 將告警結果轉為採購、生產及管理單位可執行的資訊。
+- Integrated raw-material, procurement, inventory, BOM, and production data across systems.
+- Built daily inventory movement and shortage-detection logic in Python.
+- Designed the analytical data model used by Power BI.
+- Developed inventory trends, risk lists, and drill-down detail pages.
+- Converted forecast results into actionable information for procurement, production, and management teams.
 
-## 成果
+## Key Outcomes
 
-- 管理超過 **50 種原料**，每月成本規模約 **新台幣 10 億元**。
-- 建立未來三個月的每日庫存預測。
-- 將分散資料整合為共同的管理依據。
-- 以分級告警協助採購及生產單位提前處理缺料風險。
+- Covers more than **50 raw materials** with a monthly cost base of approximately **NT$1 billion**.
+- Provides a daily inventory forecast for the next three months.
+- Establishes a shared planning view across procurement, production, and management.
+- Uses tiered alerts to support early action on potential shortages.
 
-## 報表畫面
+## Dashboard Views
 
-### 庫存預測趨勢
+### Inventory Forecast Trend
 
-<img src="./dashboard/01_inventory_forecast_trend.jpg" alt="庫存預測趨勢" width="900">
+<img src="./dashboard/01_inventory_forecast_trend.jpg" alt="Inventory forecast trend" width="900">
 
-呈現目前庫存、預計進貨、預估耗用及安全水位，判斷可能缺料的時間點。
+Shows current inventory, expected receipts, forecast consumption, and safety thresholds to identify potential shortage dates.
 
-### 庫存異常警示
+### Inventory Risk Alerts
 
-<img src="./dashboard/02_inventory_volume_alert.jpg" alt="庫存異常警示" width="250">
+<img src="./dashboard/02_inventory_volume_alert.jpg" alt="Inventory risk alerts" width="250">
 
-彙整需要優先處理的原料及風險等級。
+Summarizes materials requiring attention and their alert levels.
 
-### 近期斷料警示
+### Near-Term Shortage Alerts
 
-<img src="./dashboard/03_near_term_stockout_alert.jpg" alt="近期斷料警示" width="550">
+<img src="./dashboard/03_near_term_stockout_alert.jpg" alt="Near-term shortage alerts" width="550">
 
-列出短期缺料項目、預計發生日期及處理優先順序。
+Lists materials at near-term risk, expected shortage dates, and handling priority.
 
-### 每日預估明細
+### Daily Forecast Detail
 
-<img src="./dashboard/04_daily_forecast_matrix.jpg" alt="每日預估明細" width="900">
+<img src="./dashboard/04_daily_forecast_matrix.jpg" alt="Daily forecast detail" width="900">
 
-按日呈現庫存、進貨、耗用及預估結果，供異常追查。
+Provides daily inventory, receipts, consumption, and forecast balances for root-cause analysis.
 
-## 使用技術
+## Technology
 
-Python、Pandas、SQL、關聯式資料庫、Power BI、Power Automate、Teams。
+Python, Pandas, SQL, relational databases, Power BI, Power Automate, and Teams.
 
-## 保密說明
+## Confidentiality
 
-本案例僅呈現去識別化的問題、分析邏輯與報表設計，不含公司原始資料、連線資訊、內部資料表名稱、完整規則及可直接重現的執行環境。
+This case study presents de-identified business logic and dashboard design only. It excludes proprietary data, connection details, internal table names, complete business rules, and a directly reproducible runtime environment.
