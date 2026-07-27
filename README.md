@@ -44,8 +44,8 @@ It consolidates expected daily raw material delivery, forecast consumption, and 
 
 Orange indicates that forecast inventory is below the alert threshold for the day (set to 200 in this example); red indicates that forecast inventory is below zero.
 
-Some raw materials must undergo trial melting, composition verification, and release procedures after receipt before they can be used in production. Reviewing book inventory alone may therefore suggest that quantity is sufficient even though the material has not yet been released when production needs it.
-To reflect these operational requirements, the project defines two management metrics—Total Inventory and Available Inventory—so the forecast matrix follows actual material-management logic.
+We introduce inventory and "available" inventory as key indicator for different raw material management. 
+Some materials must still undergo trial melting, composition verification, and release procedures after stock in before they can be used in production. Only watching inventory may therefore show sufficient quantities even though the materials have not yet been released for producing.
 
 <table>
   <tr>
@@ -59,7 +59,7 @@ To reflect these operational requirements, the project defines two management me
 
 💡 Identify when inventory gaps are expected to emerge
 
-Current inventory, planned receipts, forecast consumption, and safety stock are displayed on a single timeline, enabling users to understand inventory movements and identify when a shortage is expected to develop.
+Place current inventory, expected receipts, forecast consumption, and safety-stock levels on a single timeline, enabling users to see overall inventory trends and identify when shortages are expected to emerge.
 
 <table>
   <tr>
@@ -69,9 +69,9 @@ Current inventory, planned receipts, forecast consumption, and safety stock are 
   </tr>
 </table>
 
-### Replace Manual Preparation with Daily Automated Monitoring
+### From Manual Consolidation to Daily Automated Monitoring
 
-Previously, one employee spent approximately three hours each week preparing data and forecasting inventory. The system now completes data extraction, supply-and-demand forecasting, result updates, and Teams alert distribution automatically every day, with no manual initiation required.
+Previously, one person spent approximately three hours each week consolidating data and forecasting inventory. The process is now fully automated each day—covering data collection, supply-and-demand forecasting, result updates, and Teams alert notifications—without any manual initiation.
 
 It currently covers more than 50 raw materials representing approximately NT$1 billion in monthly material costs and continuously supports material supply and production scheduling decisions.
 
@@ -79,15 +79,15 @@ It currently covers more than 50 raw materials representing approximately NT$1 b
 
 ### 1. Define the Raw Material Forecast Matrix and Data Sources
 
-Together with the collaborating teams, I defined the business logic for receipts, consumption, and inventory. I also reviewed data sources including MES, the procurement system, production plans, and the lowest-cost BOM, clarifying update frequencies, date fields, and business definitions so that data from different systems could be aligned in a single forecast matrix.
+Worked with cross-functional teams to define the business logic for procurement, consumption, and inventory, and mapped data sources across MES, procurement systems, production plans, and the lowest-cost BOM. This clarified each dataset’s update frequency and business definitions, enabling data dispersed across different systems to be aligned within a single forecasting matrix.
 
 | Matrix Field | Data or Calculation Basis | Analytical Purpose |
 |---|---|---|
 | Opening Inventory | Current inventory quantity and material status (MES) | Establish the starting point for the inventory forecast |
-| Receipts | Purchase quantity and expected receipt date (MES and procurement system) | Estimate future replenishment |
-| Consumption | Production plans and lowest-cost BOM explosion results | Estimate raw material demand by date |
-| Total Inventory | Daily calculation based on opening inventory, planned receipts, and forecast consumption | Determine whether the overall material quantity is sufficient |
-| Available Inventory | Total inventory less quantities still subject to inspection or release controls | Determine whether the material can actually be used in production |
+| Procurement | Purchase quantity and expected procurement date (MES and procurement system) | Estimate future replenishment |
+| Consumption | Production plans and lowest-cost BOM | Estimate raw material demand by date |
+| Inventory | Daily calculation based on opening inventory, planned procurement, and forecast consumption | Determine whether the overall material quantity is sufficient |
+| Available Inventory | Inventory which already inspected and released | Determine whether the material can actually be used in production |
 
 ### 2. Integrate Data and Build the Raw Material Inventory Forecasting Model
 
