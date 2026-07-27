@@ -1,108 +1,160 @@
 **English** | [繁體中文](README_ZH-TW.md)
 
-# Raw Material Inventory Forecasting and Alert System
+# Raw Material Inventory Forecasting and Stockout Alert System
 
-Extended raw-material planning from a current-stock view to a forward-looking supply-and-demand forecast, giving procurement, production, and management teams a shared basis for replenishment and risk decisions. The system integrates inventory, procurement, bill of materials (BOM), and production-plan data to forecast daily receipts, consumption, and stock for the next three months. It covers more than **50 raw materials** with a monthly cost base of approximately **NT$1 billion** and issues tiered alerts for early action.
+This project integrates inventory, procurement, inbound delivery, production planning, and BOM data to forecast daily raw material inventory movements, enabling earlier identification of stockout risks and timely corrective action.
 
-## Project Overview
+## Purpose
 
-| Item | Description |
-|---|---|
-| Business domain | Raw-material procurement, inventory, and production planning |
-| My role | Data integration, forecasting logic, Power BI reporting, alert workflow |
-| Coverage | More than 50 raw materials |
-| Cost base | Approximately NT$1 billion per month |
-| Forecast horizon | Next three months, updated daily |
+Operationalizing the lowest-cost BOM requires more than the reliable data foundation provided by the [Lowest-Cost BOM Data and Decision Platform](https://github.com/ChienChienChien/BOM_Management_Platform/blob/main/README.md). The required raw materials must also be available when the BOM is executed in production.
 
-## Business Challenge
+This project integrates inventory, procurement, inbound delivery, production planning, and BOM data to build a daily supply-and-demand forecast for the next three months, supported by tiered alerts. It enables relevant teams to expedite materials or adjust production plans early enough to meet the raw material requirements of the lowest-cost BOM.
 
-Inventory, procurement status, actual consumption, BOM, and production plans were distributed across different systems. Current inventory alone could not show whether future receipts would meet production demand, while late identification of a shortage reduced the time available for purchasing and schedule adjustments.
+## Outcomes
+
+The system is live and runs daily, transforming raw material management from a periodic manual process into a decision workflow based on daily data refreshes, rolling forecasts, and exception alerts.
+
+### Identify Stockout Risks with Tiered Alerts
+
+💡 Convert stockout risks into clear handling priorities
+
+The system classifies risk urgency based on the expected stockout date:
+
+- **15-day alert:** There is still time to close the projected gap through procurement, supplier follow-up, or expedited delivery.
+- **3-day alert:** A stockout is imminent and requires immediate expediting or production rescheduling.
+
+<table>
+  <tr>
+    <td align="center" width="35%">
+      <img src="./dashboard/02_inventory_volume_alert.jpg" alt="Inventory exception alert" width="250"><br>
+      <sub>Inventory exception alert</sub>
+    </td>
+    <td align="center" width="65%">
+      <img src="./dashboard/03_near_term_stockout_alert.jpg" alt="Near-term stockout alert" width="550"><br>
+      <sub>Near-term stockout alert: shows at-risk materials, expected stockout dates, and handling priorities</sub>
+    </td>
+  </tr>
+</table>
+
+### Raw Material Receipts, Consumption, and Inventory Forecast Matrix
+
+💡 Build a daily view of raw material movements for the next three months
+
+The matrix consolidates planned receipts, forecast consumption, total inventory, and available inventory by day. Color-coded alerts help users quickly locate at-risk materials and the dates on which exceptions are expected.
+
+Orange indicates that forecast inventory is below the alert threshold for the day (set to 200 in this example); red indicates that forecast inventory is below zero.
+
+Some raw materials must undergo trial melting, composition verification, and release procedures after receipt before they can be used in production. Reviewing book inventory alone may therefore suggest that quantity is sufficient even though the material has not yet been released when production needs it.
+To reflect these operational requirements, the project defines two management metrics—Total Inventory and Available Inventory—so the forecast matrix follows actual material-management logic.
+
+<table>
+  <tr>
+    <td align="center" width="100%">
+      <img src="./dashboard/04_daily_forecast_matrix.jpg" alt="Raw material receipts, consumption, and inventory forecast matrix" width="900"><br>
+    </td>
+  </tr>
+</table>
+
+### Inventory Forecast Trend
+
+💡 Identify when inventory gaps are expected to emerge
+
+Current inventory, planned receipts, forecast consumption, and safety stock are displayed on a single timeline, enabling users to understand inventory movements and identify when a shortage is expected to develop.
+
+<table>
+  <tr>
+    <td align="center" width="100%">
+      <img src="./dashboard/01_inventory_forecast_trend.jpg" alt="Inventory forecast trend" width="900"><br>
+    </td>
+  </tr>
+</table>
+
+### Replace Manual Preparation with Daily Automated Monitoring
+
+Previously, one employee spent approximately three hours each week preparing data and forecasting inventory. The system now completes data extraction, supply-and-demand forecasting, result updates, and Teams alert distribution automatically every day, with no manual initiation required.
+
+It currently covers more than 50 raw materials representing approximately NT$1 billion in monthly material costs and continuously supports material supply and production scheduling decisions.
 
 ## Approach
 
-1. Integrated on-hand and restricted inventory, purchase orders, inbound schedules, BOM, production plans, and actual consumption.
-2. Aligned all sources by material and date.
-3. Estimated daily consumption using near-term production schedules and medium-term plans.
-4. Added planned receipts and inventory movements to calculate future daily balances.
-5. Assigned alert levels based on safety thresholds and expected shortage dates.
-6. Presented trends, risk lists, and daily detail in Power BI and issued daily Teams notifications.
+### 1. Define the Raw Material Forecast Matrix and Data Sources
 
-## Core Logic
+Together with the collaborating teams, I defined the business logic for receipts, consumption, and inventory. I also reviewed data sources including MES, the procurement system, production plans, and the lowest-cost BOM, clarifying update frequencies, date fields, and business definitions so that data from different systems could be aligned in a single forecast matrix.
 
-```text
-Available inventory = Total inventory - Restricted inventory
-```
+| Matrix Field | Data or Calculation Basis | Analytical Purpose |
+|---|---|---|
+| Opening Inventory | Current inventory quantity and material status (MES) | Establish the starting point for the inventory forecast |
+| Receipts | Purchase quantity and expected receipt date (MES and procurement system) | Estimate future replenishment |
+| Consumption | Production plans and lowest-cost BOM explosion results | Estimate raw material demand by date |
+| Total Inventory | Daily calculation based on opening inventory, planned receipts, and forecast consumption | Determine whether the overall material quantity is sufficient |
+| Available Inventory | Total inventory less quantities still subject to inspection or release controls | Determine whether the material can actually be used in production |
 
-```text
-Forecast inventory today = Forecast inventory yesterday + Receipts today - Consumption today
-```
+### 2. Integrate Data and Build the Raw Material Inventory Forecasting Model
 
-| Forecast period | Consumption basis |
-|---|---|
-| Next week | BOM and actual production schedule |
-| Remainder of current month | BOM, weekly production plan, and working days |
-| Following months | BOM, monthly production plan, and working days |
+In collaboration with IT, I integrated inventory, purchase order, and receipt data from MES and the procurement system into the Data Warehouse. I then implemented the receipts, consumption, and inventory business logic in Python to build the raw material inventory forecasting model.
+Each day, the Python program retrieves the latest data, adds planned receipts and deducts forecast consumption in chronological order, rolls the daily inventory forecast forward for the next three months, and writes the results to SQL Server.
+
+Because some raw materials must undergo trial melting, composition verification, and release procedures after receipt, the model forecasts both Total Inventory and Available Inventory. Materials that have not met the release requirements are included in Total Inventory but not immediately in Available Inventory, preventing book quantities from overstating actual supply availability.
+
+This stage converts cross-system operational data into a consistent daily supply-and-demand view, allowing users to see the future receipts, consumption, and inventory movements of each raw material.
+
+### 3. Define Stockout Risks and Alert Levels
+
+The daily raw material forecast is condensed into business-relevant tracking metrics:
+
+- **15-day alert:** There is still time to close the projected gap through supplier follow-up, expedited delivery, or procurement adjustments.
+- **3-day alert:** The stockout risk is urgent and requires immediate expediting or evaluation of production rescheduling.
+
+These metrics answer the following questions:
+
+- Which raw material may be insufficient?
+- On which date is the gap expected to occur?
+- Is the issue insufficient total inventory, or has the material not yet reached an available status?
+- How much time remains before the stockout?
+- Which items should be handled first?
+
+This stage translates supply-and-demand forecasts into management information with clear urgency and handling priorities.
+
+### 4. Embed Analytical Results into Daily Decision-Making
+
+Information is presented and delivered according to different decision scenarios:
+
+- **Power BI:** Displays supply-and-demand trends for the next three months, daily inventory movements, expected stockout dates, and risk drivers to support overall monitoring and exception analysis.
+- **Power Automate / Teams:** Proactively distributes the stockout alert report every morning, enabling relevant teams to expedite materials and adjust schedules according to alert level.
 
 ## Architecture
 
 ```mermaid
-flowchart TB
-    A["Inventory, procurement, and receipts"] --> E["Python data integration"]
-    B["BOM and production plans"] --> E
-    C["Actual consumption and work calendar"] --> E
-    E --> F["Daily inventory forecast"]
-    F --> G["Forecast results in SQL"]
-    G --> H["Power BI reporting"]
-    H --> I["Power Automate and Teams alerts"]
+flowchart TD
+    A["MES / Procurement System<br/>Inventory, Procurement, and Receipt Data"]
+    B["Production Plans and<br/>Lowest-Cost BOM"]
+    C["Data Warehouse<br/>Cross-System Data Integration"]
+    D["Python Raw Material Inventory Forecasting Model<br/>Daily Run on Windows VM"]
+    E["SQL Server<br/>Raw Material Inventory Forecast Results"]
+    F["Power BI<br/>Data Visualization and Alert Analysis"]
+    G["Power Automate / Teams<br/>Daily Tiered Alerts"]
+
+    A --> C
+    B --> C
+    C --> D
+    D --> E
+    E --> F
+    F --> G
 ```
 
-See the [detailed system architecture](docs/architecture_en.md) for component responsibilities and the forecasting data flow.
+The architecture uses the Data Warehouse as the cross-system data foundation. Python runs daily to forecast raw material receipts, consumption, and inventory for each day over the next three months, then writes the results to SQL Server.
 
-## My Contributions
-
-- Integrated raw-material, procurement, inventory, BOM, and production data across systems.
-- Built daily inventory movement and shortage-detection logic in Python.
-- Designed the analytical data model used by Power BI.
-- Developed inventory trends, risk lists, and drill-down detail pages.
-- Converted forecast results into actionable information for procurement, production, and management teams.
-
-## Key Outcomes
-
-- Covers more than **50 raw materials** with a monthly cost base of approximately **NT$1 billion**.
-- Provides a daily inventory forecast for the next three months.
-- Establishes a shared planning view across procurement, production, and management.
-- Uses tiered alerts to support early action on potential shortages.
-
-## Dashboard Views
-
-### Inventory Forecast Trend
-
-<img src="./dashboard/01_inventory_forecast_trend.jpg" alt="Inventory forecast trend" width="900">
-
-Shows current inventory, expected receipts, forecast consumption, and safety thresholds to identify potential shortage dates.
-
-### Inventory Risk Alerts
-
-<img src="./dashboard/02_inventory_volume_alert.jpg" alt="Inventory risk alerts" width="250">
-
-Summarizes materials requiring attention and their alert levels.
-
-### Near-Term Shortage Alerts
-
-<img src="./dashboard/03_near_term_stockout_alert.jpg" alt="Near-term shortage alerts" width="550">
-
-Lists materials at near-term risk, expected shortage dates, and handling priority.
-
-### Daily Forecast Detail
-
-<img src="./dashboard/04_daily_forecast_matrix.jpg" alt="Daily forecast detail" width="900">
-
-Provides daily inventory, receipts, consumption, and forecast balances for root-cause analysis.
+Power BI provides data visualization and alert analysis, while Power Automate distributes the stockout alert report through Teams.
 
 ## Technology
 
-Python, Pandas, SQL, relational databases, Power BI, Power Automate, and Teams.
+| Capability | Technology | Use in the Project |
+|---|---|---|
+| Business Logic Modeling and Implementation | Python | Converts receipt, consumption, and material-release rules into daily supply-and-demand forecasts |
+| System Execution and Operations | Windows VM | Runs daily schedules, data processing, and exception monitoring |
+| Analytics and Decision Support | Power BI | Presents future supply and demand, inventory trends, and raw material risks |
+| Workflow and Alert Automation | Power Automate, Teams | Distributes tiered alerts daily and embeds analytical results into material-planning decisions |
 
 ## Confidentiality
 
-This case study presents de-identified business logic and dashboard design only. It excludes proprietary data, connection details, internal table names, complete business rules, and a directly reproducible runtime environment.
+This case study presents only de-identified business problems, analytical logic, and dashboard designs. It excludes proprietary company data, connection details, internal table names, complete business rules, and a directly reproducible runtime environment.
