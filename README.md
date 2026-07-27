@@ -2,13 +2,13 @@
 
 # Raw Material Inventory Forecasting and Stockout Alert System
 
-This project integrates inventory, procurement, inbound delivery, production planning, and BOM data to forecast daily raw material inventory movements, enabling earlier identification of stockout risks and timely corrective action.
+This project integrates cross-system data to forecast daily changes in future raw-material inventory, enabling early identification of potential material shortages and timely response actions.
 
 ## Purpose
 
-Operationalizing the lowest-cost BOM requires more than the reliable data foundation provided by the [Lowest-Cost BOM Data and Decision Platform](https://github.com/ChienChienChien/BOM_Management_Platform/blob/main/README.md). The required raw materials must also be available when the BOM is executed in production.
+For the lowest-cost BOM to be successfully implemented, not only the [Lowest-Cost BOM Data and Decision Platform](https://github.com/ChienChienChien/BOM_Management_Platform/blob/main/README.md) must provide a stable data foundation, but also the lowest-cost BOM must be exactly executated in producting operation.
 
-This project integrates inventory, procurement, inbound delivery, production planning, and BOM data to build a daily supply-and-demand forecast for the next three months, supported by tiered alerts. It enables relevant teams to expedite materials or adjust production plans early enough to meet the raw material requirements of the lowest-cost BOM.
+By integrating inventory, purchase orders, inbound deliveries, production plans, and BOM data, the project establishes a daily inventory forecast and tiered alerting mechanism for the next three months. This enables collaborate teams to expedite materials or adjust production plans in advance to meet the raw-material requirements of the lowest-cost BOM.
 
 ## Outcomes
 
@@ -36,11 +36,11 @@ The system classifies risk urgency based on the expected stockout date:
   </tr>
 </table>
 
-### Raw Material Receipts, Consumption, and Inventory Forecast Matrix
+### Raw Material Inventory Forecast Matrix
 
 💡 Build a daily view of raw material movements for the next three months
 
-The matrix consolidates planned receipts, forecast consumption, total inventory, and available inventory by day. Color-coded alerts help users quickly locate at-risk materials and the dates on which exceptions are expected.
+It consolidates expected daily raw material delivery, forecast consumption, and inventory into a single matrix, using color coding to flag warning and shortage conditions so users can quickly identify at-risk raw materials and the dates on which issues will occur.
 
 Orange indicates that forecast inventory is below the alert threshold for the day (set to 200 in this example); red indicates that forecast inventory is below zero.
 
