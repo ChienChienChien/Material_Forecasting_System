@@ -12,7 +12,7 @@ By integrating inventory, purchase orders, inbound receipts, production plans, a
 
 ## Outcomes
 
-The system is live and runs daily, transforming raw material management from a periodic manual process into a decision workflow based on daily data refreshes, rolling forecasts, and exception alerts.
+The system is live and runs daily, transforming raw-material management from a periodic manual process into a decision workflow based on daily data refreshes, rolling forecasts, and exception alerts.
 
 ### Identify Stockout Risks with Tiered Alerts
 
@@ -46,9 +46,9 @@ The alert framework helps users answer the following questions:
 
 ### Raw Material Inventory Forecast Matrix
 
-💡 Build a daily view of raw material movements for the next three months
+💡 Build a daily view of raw-material movements for the next three months
 
-It consolidates expected daily raw material delivery, forecast consumption, and inventory into a single matrix, using color coding to flag warning and shortage conditions so users can quickly identify at-risk raw materials and the dates on which issues will occur.
+It consolidates expected expected daily receipts, forecast consumption, and inventory into a single matrix, using color coding to flag warning and shortage conditions so users can quickly identify at-risk raw materials and the dates on which issues will occur.
 
 Orange indicates that forecast inventory is below the alert threshold for the day (set to 200 in this example); red indicates that forecast inventory is below zero.
 
@@ -89,19 +89,19 @@ It currently covers more than 50 raw materials representing approximately NT$1 b
 
 ### 1. Define the Raw Material Forecast Matrix and Data Sources
 
-Worked with cross-functional teams to define the business logic for procurement, consumption, and inventory, and mapped data sources across MES, procurement systems, production plans, and the lowest-cost BOM. This clarified each dataset’s update frequency and business definitions, enabling data dispersed across different systems to be aligned within a single forecasting matrix.
+Worked with cross-functional teams to define the business logic for procurement, consumption, and inventory, and mapped data sources across MES, the procurement system, production plans, and the lowest-cost BOM. This clarified each dataset’s update frequency and business definitions, enabling data dispersed across different systems to be aligned within a single forecasting matrix.
 
 | Matrix Field | Data or Calculation Basis | Analytical Purpose |
 |---|---|---|
 | Opening Inventory | Current inventory quantity and material status (MES) | Establish the starting point for the inventory forecast |
-| Procurement  |Purchase quantity and expected receipt date (MES and procurement system) | Estimate future replenishment |
-| Consumption | Production plans and lowest-cost BOM | Estimate raw material demand by date |
-| Inventory | Daily calculation based on opening inventory, planned procurement, and forecast consumption | Determine whether the overall material quantity is sufficient |
+| Inbound Receipts |Purchase quantity and expected receipt date (MES and procurement system) | Estimate future replenishment |
+| Consumption | Production plans and lowest-cost BOM | Estimate raw-material demand by date |
+| Total Inventory | Daily calculation based on opening inventory, planned procurement, and forecast consumption | Determine whether the overall material quantity is sufficient |
 | Available Inventory | Total inventory excluding controlled quantities pending inspection or release | Determine whether the material can actually be used in production |
 
 ### 2. Integrate Data and Build the Raw Material Inventory Forecasting Model
 
-- Collaborated with the IT team to integrate inventory, purchasing, and inbound-delivery data from MES and procurement systems into the data warehouse.
+- Collaborated with the IT team to integrate inventory, purchasing, and inbound receipt data from MES and procurement systems into the data warehouse.
 - Implemented the business logic in Python to build a raw-material inventory forecasting model.
 - Automated the daily refresh of raw-material inventory forecasts and wrote the results to SQL Server.
 
@@ -127,7 +127,7 @@ flowchart TD
     C["Data Warehouse"]
     D["Python Forecasting Model<br/>Daily Run on Windows VM"]
     E["SQL Server<br/>Forecast Results"]
-    F["Power BI<br/>Matrix and Alert"]
+    F["Power BI<br/>Forecasts & Alerts"]
     G["Power Automate / Teams<br/>Daily Alerts"]
 
     A --> C
@@ -142,10 +142,10 @@ flowchart TD
 
 | Capability | Technology | Use in the Project |
 |---|---|---|
-| Business Logic Modeling and Implementation | Python | Converts procurement, consumption, and material-release rules into daily supply-and-demand forecasts |
+| Business Logic Modeling and Implementation | Python | Converts inbound receipt, consumption, and material-release rules into daily supply-and-demand forecasts |
 | System Execution and Operations | Windows VM | Runs daily schedules, data processing, and exception monitoring |
-| Analytics and Decision Support | Power BI | Presents future supply and demand, inventory trends, and raw material risks |
-| Workflow and Alert Automation | Power Automate, Teams | Distributes tiered alerts daily and embeds analytical results into raw material decisions |
+| Analytics and Decision Support | Power BI | Presents future supply and demand, inventory trends, and raw-material risks |
+| Workflow and Alert Automation | Power Automate, Teams | Distributes tiered alerts daily and embeds analytical results into raw-material decisions |
 
 ## Confidentiality
 
