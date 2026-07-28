@@ -6,9 +6,9 @@ This project integrates cross-system data to forecast daily changes in future ra
 
 ## Purpose
 
-For the lowest-cost BOM to be successfully implemented, not only the [Lowest-Cost BOM Data and Decision Platform](https://github.com/ChienChienChien/BOM_Management_Platform/blob/main/README.md) must provide a stable data foundation, but also the lowest-cost BOM must be exactly executated in producting operation.
+Successfully implementing the lowest-cost BOM requires not only a reliable data foundation provided by the [Lowest-Cost BOM Data and Decision Platform](https://github.com/ChienChienChien/BOM_Management_Platform/blob/main/README.md), but also the operational readiness to execute the selected BOM during actual production.
 
-By integrating inventory, purchase orders, inbound deliveries, production plans, and BOM data, the project establishes a daily inventory forecast and tiered alerting mechanism for the next three months. This enables collaborate teams to expedite materials or adjust production plans in advance to meet the raw-material requirements of the lowest-cost BOM.
+By integrating inventory, purchase orders, inbound receipts, production plans, and BOM data, the project establishes daily inventory forecasts and tiered alerts for the next three months. This enables cross-functional teams to expedite materials or adjust production plans in advance, ensuring that the raw-material requirements of the lowest-cost BOM can be met.
 
 ## Outcomes
 
@@ -36,6 +36,14 @@ The system classifies risk urgency based on the expected stockout date:
   </tr>
 </table>
 
+The alert framework helps users answer the following questions:
+
+- Which raw materials are at risk of shortage?
+- When is the shortage expected to occur?
+- Is the issue caused by insufficient total inventory or by materials that have not yet been released for use?
+- How much response time remains?
+- Which items should be prioritized?
+
 ### Raw Material Inventory Forecast Matrix
 
 💡 Build a daily view of raw material movements for the next three months
@@ -43,9 +51,6 @@ The system classifies risk urgency based on the expected stockout date:
 It consolidates expected daily raw material delivery, forecast consumption, and inventory into a single matrix, using color coding to flag warning and shortage conditions so users can quickly identify at-risk raw materials and the dates on which issues will occur.
 
 Orange indicates that forecast inventory is below the alert threshold for the day (set to 200 in this example); red indicates that forecast inventory is below zero.
-
-We introduce inventory and "available" inventory as key indicator for different raw material management. 
-Some materials must still undergo trial melting, composition verification, and release procedures after stock in before they can be used in production. Only watching inventory may therefore show sufficient quantities even though the materials have not yet been released for producing.
 
 <table>
   <tr>
@@ -55,11 +60,16 @@ Some materials must still undergo trial melting, composition verification, and r
   </tr>
 </table>
 
+Some materials must undergo trial melting, composition verification, and release procedures after receipt before they can be used in production. Reviewing only the recorded inventory may therefore indicate sufficient quantities even when the materials have not yet been released for production.
+
+To reflect these operational requirements, the project uses two management metrics: Total Inventory and Available Inventory. This ensures that the forecast matrix represents not only the recorded quantity but also whether the materials can actually be used in production.
+
+
 ### Inventory Forecast Trend
 
 💡 Identify when inventory gaps are expected to emerge
 
-Place current inventory, expected receipts, forecast consumption, and safety-stock levels on a single timeline, enabling users to see overall inventory trends and identify when shortages are expected to emerge.
+The trend view places current inventory, expected receipts, forecast consumption, and safety-stock levels on a single timeline, enabling users to understand overall inventory movements and identify when shortages are expected to emerge.
 
 <table>
   <tr>
@@ -84,10 +94,10 @@ Worked with cross-functional teams to define the business logic for procurement,
 | Matrix Field | Data or Calculation Basis | Analytical Purpose |
 |---|---|---|
 | Opening Inventory | Current inventory quantity and material status (MES) | Establish the starting point for the inventory forecast |
-| Procurement | Purchase quantity and expected procurement date (MES and procurement system) | Estimate future replenishment |
+| Procurement  |Purchase quantity and expected receipt date (MES and procurement system) | Estimate future replenishment |
 | Consumption | Production plans and lowest-cost BOM | Estimate raw material demand by date |
 | Inventory | Daily calculation based on opening inventory, planned procurement, and forecast consumption | Determine whether the overall material quantity is sufficient |
-| Available Inventory | Inventory which already inspected and released | Determine whether the material can actually be used in production |
+| Available Inventory | Total inventory excluding controlled quantities pending inspection or release | Determine whether the material can actually be used in production |
 
 ### 2. Integrate Data and Build the Raw Material Inventory Forecasting Model
 
@@ -95,7 +105,7 @@ Worked with cross-functional teams to define the business logic for procurement,
 - Implemented the business logic in Python to build a raw-material inventory forecasting model.
 - Automated the daily refresh of raw-material inventory forecasts and wrote the results to SQL Server.
 
-### 3. Build a Power BI decision-support platform for inventory forecasting
+### 3. Build a Power BI Decision-Support Platform for Inventory Forecasting
 
 - Stockout alert matrix
 - Raw Material Inventory Forecast Matrix
