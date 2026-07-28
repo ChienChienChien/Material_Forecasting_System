@@ -91,48 +91,34 @@ Worked with cross-functional teams to define the business logic for procurement,
 
 ### 2. Integrate Data and Build the Raw Material Inventory Forecasting Model
 
-In collaboration with IT, I integrated inventory, purchase order, and receipt data from MES and the procurement system into the Data Warehouse. I then implemented the receipts, consumption, and inventory business logic in Python to build the raw material inventory forecasting model.
-Each day, the Python program retrieves the latest data, adds planned receipts and deducts forecast consumption in chronological order, rolls the daily inventory forecast forward for the next three months, and writes the results to SQL Server.
+- Collaborated with the IT team to integrate inventory, purchasing, and inbound-delivery data from MES and procurement systems into the data warehouse.
+- Implemented the business logic in Python to build a raw-material inventory forecasting model.
+- Automated the daily refresh of raw-material inventory forecasts and wrote the results to SQL Server.
 
-Because some raw materials must undergo trial melting, composition verification, and release procedures after receipt, the model forecasts both Total Inventory and Available Inventory. Materials that have not met the release requirements are included in Total Inventory but not immediately in Available Inventory, preventing book quantities from overstating actual supply availability.
+### 3. Build a Power BI decision-support platform for inventory forecasting
 
-This stage converts cross-system operational data into a consistent daily supply-and-demand view, allowing users to see the future receipts, consumption, and inventory movements of each raw material.
-
-### 3. Define Stockout Risks and Alert Levels
-
-The daily raw material forecast is condensed into business-relevant tracking metrics:
-
-- **15-day alert:** There is still time to close the projected gap through supplier follow-up, expedited delivery, or procurement adjustments.
-- **3-day alert:** The stockout risk is urgent and requires immediate expediting or evaluation of production rescheduling.
-
-These metrics answer the following questions:
-
-- Which raw material may be insufficient?
-- On which date is the gap expected to occur?
-- Is the issue insufficient total inventory, or has the material not yet reached an available status?
-- How much time remains before the stockout?
-- Which items should be handled first?
-
-This stage translates supply-and-demand forecasts into management information with clear urgency and handling priorities.
+- Stockout alert matrix
+- Raw Material Inventory Forecast Matrix
+- Inventory Forecast Trend
 
 ### 4. Embed Analytical Results into Daily Decision-Making
 
 Information is presented and delivered according to different decision scenarios:
 
-- **Power BI:** Displays supply-and-demand trends for the next three months, daily inventory movements, expected stockout dates, and risk drivers to support overall monitoring and exception analysis.
-- **Power Automate / Teams:** Proactively distributes the stockout alert report every morning, enabling relevant teams to expedite materials and adjust schedules according to alert level.
+- **Power BI:** Visualizes three-month supply-and-demand trends, daily inventory changes, expected shortage dates, and the underlying risk drivers.
+- **Power Automate / Teams:** Automatically publishes a daily shortage-alert report each morning, enabling collaborating teams to prioritize material expediting and scheduling adjustments based on alert severity.
 
 ## Architecture
 
 ```mermaid
 flowchart TD
-    A["MES / Procurement System<br/>Inventory, Procurement, and Receipt Data"]
+    A["MES / Procurement System"]
     B["Production Plans and<br/>Lowest-Cost BOM"]
-    C["Data Warehouse<br/>Cross-System Data Integration"]
-    D["Python Raw Material Inventory Forecasting Model<br/>Daily Run on Windows VM"]
-    E["SQL Server<br/>Raw Material Inventory Forecast Results"]
-    F["Power BI<br/>Data Visualization and Alert Analysis"]
-    G["Power Automate / Teams<br/>Daily Tiered Alerts"]
+    C["Data Warehouse"]
+    D["Python Forecasting Model<br/>Daily Run on Windows VM"]
+    E["SQL Server<br/>Forecast Results"]
+    F["Power BI<br/>Matrix and Alert"]
+    G["Power Automate / Teams<br/>Daily Alerts"]
 
     A --> C
     B --> C
@@ -142,18 +128,14 @@ flowchart TD
     F --> G
 ```
 
-The architecture uses the Data Warehouse as the cross-system data foundation. Python runs daily to forecast raw material receipts, consumption, and inventory for each day over the next three months, then writes the results to SQL Server.
-
-Power BI provides data visualization and alert analysis, while Power Automate distributes the stockout alert report through Teams.
-
 ## Technology
 
 | Capability | Technology | Use in the Project |
 |---|---|---|
-| Business Logic Modeling and Implementation | Python | Converts receipt, consumption, and material-release rules into daily supply-and-demand forecasts |
+| Business Logic Modeling and Implementation | Python | Converts procurement, consumption, and material-release rules into daily supply-and-demand forecasts |
 | System Execution and Operations | Windows VM | Runs daily schedules, data processing, and exception monitoring |
 | Analytics and Decision Support | Power BI | Presents future supply and demand, inventory trends, and raw material risks |
-| Workflow and Alert Automation | Power Automate, Teams | Distributes tiered alerts daily and embeds analytical results into material-planning decisions |
+| Workflow and Alert Automation | Power Automate, Teams | Distributes tiered alerts daily and embeds analytical results into raw material decisions |
 
 ## Confidentiality
 
